@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f2848d041a45e0a3d299fc51700706, type: 3}
+  m_Name: Level01
+  m_EditorClassIdentifier: 
+  _levelNo: 1
+  _ballCountInBase: 20
+  _ballNeededToFinish: 20
+  _ballSpawnPosition: {x: 0, y: 0, z: 0}
+  _levelPrefab: {fileID: 2254242813367837492, guid: 4342f9b169cb7a441be1e9a45560f635, type: 3}
