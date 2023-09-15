@@ -17,3 +17,4 @@ MonoBehaviour:
   _ballNeededToFinish: 20
   _ballSpawnPosition: {x: 0, y: 0, z: 0}
   _levelPrefab: {fileID: 5005821432592297525, guid: 5443136089753614088b9cfae3a19e51, type: 3}
+  _cup: {fileID: 231006977627930031, guid: 20691cecedb39534d97f48f01df0c51d, type: 3}

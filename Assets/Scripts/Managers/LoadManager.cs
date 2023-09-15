@@ -6,6 +6,7 @@ using Presentation.UI;
 using Services.ConfigService.Interface;
 using Services.EventSystem.Interface;
 using Services.FactorySystem.Interface;
+using Services.LevelLoader.Interface;
 using Services.UISystem.Interface;
 using UnityEngine;
 using Zenject;
@@ -18,17 +19,20 @@ namespace Managers
         private IGameConfigService _gameConfigService;
         private IEventService _eventService;
         private IFactoryService _factoryService;
+        private ILevelLoaderService _levelLoaderService;
 
         [Inject]
         private void Init(IUIService uiService,
             IGameConfigService gameConfigService,
             IEventService eventService,
-            IFactoryService factoryService)
+            IFactoryService factoryService,
+            ILevelLoaderService levelLoaderService)
         {
             _uiService = uiService;
             _gameConfigService = gameConfigService;
             _eventService = eventService;
             _factoryService = factoryService;
+            _levelLoaderService = levelLoaderService;
         }
 
         private void Awake()
@@ -50,9 +54,10 @@ namespace Managers
                 uiLoading.SetProgress(_gameConfigService.LoadProgress);
                 await Task.Delay(10);
             }
+
             uiLoading.SetProgress(1);
             await Task.Delay(1000);
-            
+
             if (_gameConfigService.IsConfigLoaded.ActionState == ActionResultType.Fail)
             {
                 //todo reload game
@@ -65,6 +70,7 @@ namespace Managers
             }
 
             uiLoading.SetLoading("Opening Level");
+            _levelLoaderService.LoadCurrentLevel();
             await Task.Delay(1000);
             _eventService.Fire(GameEvents.ON_GAME_INITIALIZED, new OnGameInitialized());
             await Task.Delay(1000);

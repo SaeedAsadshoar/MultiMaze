@@ -3,6 +3,7 @@ using Domain.Constants;
 using Domain.Data;
 using Domain.Enum;
 using Services.ConfigService.Interface;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -49,6 +50,16 @@ namespace Services.ConfigService.Service
             }
 
             _isConfigLoaded.ChangeResult(ActionResultType.Success, string.Empty, 100);
+        }
+
+        public GameObject GetLevelObject(int levelIndex)
+        {
+            return _gameConfig.LevelSequence.AllLevelsData[levelIndex].LevelPrefab;
+        }
+
+        public GameObject GetLevelCup(int levelIndex)
+        {
+            return _gameConfig.LevelSequence.AllLevelsData[levelIndex].Cup;
         }
     }
 }

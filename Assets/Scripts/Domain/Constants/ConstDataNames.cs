@@ -3,8 +3,7 @@
     public static class ConstDataNames
     {
         public const string KEY = "5ca24005b740717ba4f3f6bc4";
-        public const string CURRENT_STATE = "mqBBHBwsvqrFPBth";
+        public const string CURRENT_LEVEL = "73024a45017bbcfca5b7406f4";
         
-        public const string ENERGY_LEVEL_UP = "mH5EpNpN9LLjPF";
     }
 }

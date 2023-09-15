@@ -8,6 +8,8 @@ using Services.FactorySystem.Interface;
 using Services.FactorySystem.Service;
 using Services.InGameRepositories.Interface;
 using Services.InGameRepositories.Services;
+using Services.LevelLoader.Interface;
+using Services.LevelLoader.Service;
 using Services.MemoryPoolSystem.Interface;
 using Services.MemoryPoolSystem.Service;
 using Services.StorageSystem.Interface;
@@ -33,6 +35,7 @@ namespace DI
             Container.Bind<IEventService>().To<EventService>().AsSingle().NonLazy();
             Container.Bind<IStorageService>().To<StorageService>().AsSingle().NonLazy();
             Container.Bind<IUIService>().To<UIService>().AsSingle().NonLazy();
+            Container.Bind<ILevelLoaderService>().To<LevelLoaderService>().AsSingle().NonLazy();
 
             Container.Bind<IFactoryService>().To<FactoryService>().AsSingle().NonLazy();
             Container.Bind<IEffectFactory>().To<EffectFactory>().AsSingle().NonLazy();
@@ -42,7 +45,7 @@ namespace DI
             Container.Bind<IUIScreenFactory>().To<UIScreenFactory>().AsSingle().NonLazy();
             Container.Bind<IPlayerFactory>().To<PlayerFactory>().AsSingle().NonLazy();
 
-            Container.Bind<IInGameRepositorySystem>().To<InGameRepositoryService>().AsSingle().NonLazy();
+            Container.Bind<IInGameRepositoryService>().To<InGameRepositoryService>().AsSingle().NonLazy();
 
             Container.BindInterfacesAndSelfTo<UnityUpdateService>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<UnityFixedUpdateService>().AsSingle().NonLazy();

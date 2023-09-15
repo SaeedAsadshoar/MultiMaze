@@ -1,4 +1,5 @@
 using Domain.Data;
+using UnityEngine;
 
 namespace Services.ConfigService.Interface
 {
@@ -7,5 +8,7 @@ namespace Services.ConfigService.Interface
         ActionResult IsConfigLoaded { get; }
         float LoadProgress { get; }
         void LoadGameConfig();
+        GameObject GetLevelObject(int levelIndex);
+        GameObject GetLevelCup(int levelIndex);
     }
 }

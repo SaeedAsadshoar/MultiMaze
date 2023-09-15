@@ -10,11 +10,13 @@ namespace Domain.Data
         [SerializeField] private int _ballNeededToFinish;
         [SerializeField] private Vector3 _ballSpawnPosition;
         [SerializeField] private GameObject _levelPrefab;
+        [SerializeField] private GameObject _cup;
 
         public int LevelNo => _levelNo;
         public int BallCountInBase => _ballCountInBase;
         public int BallNeededToFinish => _ballNeededToFinish;
         public Vector3 BallSpawnPosition => _ballSpawnPosition;
         public GameObject LevelPrefab => _levelPrefab;
+        public GameObject Cup => _cup;
     }
 }
