@@ -8,7 +8,6 @@ namespace Services.AudioSystem.Service
     {
         public void PlayUIAudio(AudioUITypes openPage, Transform transform)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

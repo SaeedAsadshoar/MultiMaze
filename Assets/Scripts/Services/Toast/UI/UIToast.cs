@@ -13,7 +13,7 @@ namespace Services.Toast.UI
 
         [SerializeField] private TextMeshProUGUI _messageLabel;
         [SerializeField] private TextMeshProUGUI _titleLabel;
-        [SerializeField] private Image _messageThumb;
+        //[SerializeField] private Image _messageThumb;
 
         private ToastService.EachToastMessage _message;
 
@@ -28,7 +28,7 @@ namespace Services.Toast.UI
 
             _messageLabel.text = _message.Message;
             _titleLabel.text = _message.Title;
-            _messageThumb.sprite = _message.Thumb;
+            //_messageThumb.sprite = _message.Thumb;
 
             ObjectRoot.SetParent(toastParent);
             ObjectRoot.localPosition = Vector3.zero;

@@ -10,8 +10,10 @@ namespace Services.FactorySystem.Interface
         IFactoryObject GetEffect(FactoryEffectTypes effectType);
         IFactoryObject GetEnemy(EnemyTypes enemyType);
         IFactoryObject GetPlayer(HeroTypes heroType);
-        Task<IFactoryObject> GetUiElement(UiElementNames uiElementName);
-        Task<IFactoryObject> GetUiPage(UiPanelNames panelName);
+        IFactoryObject GetUiElement(UiElementNames uiElementName);
+        IFactoryObject GetUiPage(UiPanelNames panelName);
+        Task LoadUiElements();
+        Task LoadUiPanels();
         void DefineFactory(HeroTypes heroType);
         void DefineFactory(EnemyTypes enemyType);
         void DefineFactory(FactoryEffectTypes effectType);

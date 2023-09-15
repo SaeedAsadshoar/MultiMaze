@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Domain.Constants;
+using Domain.Data;
 using Domain.Enum;
 using Domain.Events;
 using Services.EventSystem.Interface;
@@ -21,8 +23,15 @@ namespace Services.UISystem.Service
         private readonly IFactoryService _factoryService;
         private readonly IEventService _eventService;
 
+        private readonly ActionResult _loadResult;
+        private float _loadProgress;
+
+        public ActionResult LoadResult => _loadResult;
+        public float LoadProgress => _loadProgress;
+
         public UIService(IFactoryService factoryService, IEventService eventService)
         {
+            _loadResult = new ActionResult(ActionResultType.InProgress, string.Empty, -1);
             _factoryService = factoryService;
             _pages = new Dictionary<UiPanelNames, IUIScreen>();
             _allPages = new List<IUIScreen>();
@@ -39,11 +48,12 @@ namespace Services.UISystem.Service
             }
 
             var page = _factoryService.GetUiPage(panelName) as IUIScreen;
+            ;
             if (page == null) return null;
             page.SetParent(panelName == UiPanelNames.UILoading ? _parentLoading : _parent);
 
             page.Show(onClose);
-            _eventService.Fire((int)GameEvents.OnPageOpen, new OnPageOpen(panelName));
+            _eventService.Fire(GameEvents.ON_PAGE_OPEN, new OnPageOpen(panelName));
             //page.SetParent(panelName == UiPanelNames.Loading ? _parentLoading : _parent);
 
             onOpenPage?.Invoke();
@@ -61,7 +71,7 @@ namespace Services.UISystem.Service
                 _pages[panelName].Close();
                 _pages.Remove(panelName);
                 onClosePage?.Invoke();
-                _eventService.Fire((int)GameEvents.OnPageOpen, _allPages.Count > 0 ? new OnPageOpen(_allPages[^1].PanelName) : new OnPageOpen(UiPanelNames.UILoading));
+                _eventService.Fire(GameEvents.ON_PAGE_OPEN, _allPages.Count > 0 ? new OnPageOpen(_allPages[^1].PanelName) : new OnPageOpen(UiPanelNames.UILoading));
             }
         }
 

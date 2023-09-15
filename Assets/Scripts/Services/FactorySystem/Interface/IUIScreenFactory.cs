@@ -6,6 +6,7 @@ namespace Services.FactorySystem.Interface
 {
     public interface IUIScreenFactory
     {
-        Task<IFactoryObject> GetUiScreen(UiPanelNames panelName);
+        Task LoadAllUIs();
+        IFactoryObject GetUiScreen(UiPanelNames panelName);
     }
 }

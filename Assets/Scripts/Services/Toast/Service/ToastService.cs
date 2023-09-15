@@ -69,11 +69,9 @@ namespace Services.Toast.Service
             }
         }
 
-        private async void ShowToast(EachToastMessage toastMessage)
+        private void ShowToast(EachToastMessage toastMessage)
         {
-            var task = _factoryService.GetUiElement(UiElementNames.Toast);
-            await task;
-            var toast = task.Result as UIToast;
+            var toast = _factoryService.GetUiElement(UiElementNames.UIToast) as UIToast;
             if (toast != null)
             {
                 toast.Show(toastMessage, _toastParent);

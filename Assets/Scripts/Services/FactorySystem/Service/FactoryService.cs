@@ -97,12 +97,22 @@ namespace Services.FactorySystem.Service
             return _playerFactory.GetPlayer(heroType);
         }
 
-        public Task<IFactoryObject> GetUiElement(UiElementNames uiElementName)
+        public async Task LoadUiElements()
+        {
+            await _uiElementFactory.LoadAllUIs();
+        }
+
+        public async Task LoadUiPanels()
+        {
+            await _uiScreenFactory.LoadAllUIs();
+        }
+
+        public IFactoryObject GetUiElement(UiElementNames uiElementName)
         {
             return _uiElementFactory.GetUiElement(uiElementName);
         }
 
-        public Task<IFactoryObject> GetUiPage(UiPanelNames panelName)
+        public IFactoryObject GetUiPage(UiPanelNames panelName)
         {
             return _uiScreenFactory.GetUiScreen(panelName);
         }

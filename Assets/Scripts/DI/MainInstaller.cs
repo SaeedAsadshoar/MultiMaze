@@ -1,7 +1,7 @@
 using Services.AudioSystem.Interface;
 using Services.AudioSystem.Service;
-using Services.Config.Interface;
-using Services.Config.Service;
+using Services.ConfigService.Interface;
+using Services.ConfigService.Service;
 using Services.EventSystem.Interface;
 using Services.EventSystem.Service;
 using Services.FactorySystem.Interface;

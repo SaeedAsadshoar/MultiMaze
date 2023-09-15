@@ -2,7 +2,6 @@
 {
     public enum UiElementNames
     {
-        None = 0,
-        Toast = 1,
+        UIToast = 0,
     }
 }

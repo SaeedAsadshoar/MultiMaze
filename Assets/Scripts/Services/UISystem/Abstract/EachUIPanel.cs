@@ -20,7 +20,7 @@ namespace Services.UISystem.Abstract
         protected IUIService UIService;
         protected IAudioService AudioService;
 
-        public virtual UiPanelNames PanelName => UiPanelNames.None;
+        public virtual UiPanelNames PanelName => UiPanelNames.UILoading;
         public bool IsClosed { get; set; }
         
         public Transform ObjectRoot

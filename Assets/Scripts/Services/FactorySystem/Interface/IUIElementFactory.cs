@@ -6,8 +6,7 @@ namespace Services.FactorySystem.Interface
 {
     public interface IUIElementFactory
     {
-        Task<IFactoryObject> GetUiElement(UiElementNames uiElementName);
-        void DefineFactory(UiElementNames uiElementName);
-        bool IsFactoryLoaded(UiElementNames uiElementName);
+        Task LoadAllUIs();
+        IFactoryObject GetUiElement(UiElementNames uiElementName);
     }
 }

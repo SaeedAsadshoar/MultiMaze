@@ -23,39 +23,47 @@ namespace Services.FactorySystem.Service
             _diContainer = diContainer;
         }
 
-        public async Task<IFactoryObject> GetUiElement(UiElementNames uiElementName)
+        public async Task LoadAllUIs()
         {
-            if (!IsFactoryLoaded(uiElementName)) DefineFactory(uiElementName);
-
-            while (!IsFactoryLoaded(uiElementName))
+            var elementNames = Enum.GetNames(typeof(UiElementNames));
+            int count = elementNames.Length;
+            for (int i = 0; i < count; i++)
             {
-                await Task.Delay(10);
+                var elementName = (UiElementNames)i;
+                DefineFactory(elementName);
+                while (!IsFactoryLoaded(elementName))
+                {
+                    await Task.Delay(10);
+                }
             }
+        }
 
+        public IFactoryObject GetUiElement(UiElementNames uiElementName)
+        {
             switch (uiElementName)
             {
-                case UiElementNames.Toast:
+                case UiElementNames.UIToast:
                     return _uiToast.Create();
             }
 
             return null;
         }
 
-        public void DefineFactory(UiElementNames uiElementName)
+        private void DefineFactory(UiElementNames uiElementName)
         {
             switch (uiElementName)
             {
-                case UiElementNames.Toast:
+                case UiElementNames.UIToast:
                     LoadFactory<UIToast, UIToast.Factory>(uiElementName.ToString(), uiElementName, _diContainer);
                     break;
             }
         }
 
-        public bool IsFactoryLoaded(UiElementNames uiElementName)
+        private bool IsFactoryLoaded(UiElementNames uiElementName)
         {
             switch (uiElementName)
             {
-                case UiElementNames.Toast:
+                case UiElementNames.UIToast:
                     return _uiToast != null;
             }
 
@@ -72,7 +80,7 @@ namespace Services.FactorySystem.Service
 
                 switch (uiElementName)
                 {
-                    case UiElementNames.Toast:
+                    case UiElementNames.UIToast:
                         _uiToast = diContainer.Resolve<UIToast.Factory>();
                         break;
                 }
