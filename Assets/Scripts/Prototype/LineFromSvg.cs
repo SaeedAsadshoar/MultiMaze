@@ -5,107 +5,216 @@ namespace Prototype
 {
     public class LineFromSvg : MonoBehaviour
     {
-        LineRenderer LR;
+        [SerializeField] private Texture2D _texture2D;
+        [SerializeField] private LineRenderer _lineRenderer;
 
-        // Use this for initialization
-        void Start()
+        [SerializeField] int _sides;
+        [SerializeField] float _radiusOne;
+        [SerializeField] float _radiusTwo;
+        [SerializeField] bool _useWorldSpace = true;
+        [SerializeField] private Material _material;
+
+        private Mesh _outsideMesh;
+        private MeshFilter _outsideMeshFilter;
+        private MeshRenderer _outsideMeshRenderer;
+
+        private Mesh _insideMesh;
+        private MeshFilter _insideMeshFilter;
+        private MeshRenderer _insideMeshRenderer;
+
+        private void Start()
         {
-            LineRenderer LR = gameObject.AddComponent<LineRenderer>();
-            LR.positionCount = 10;
-            //LR.startWidth = 0.1f;
-            //LR.endWidth = 0.1f;
-
-            for (int i = 0; i < 10; i++)
+            List<Vector2> temp = new List<Vector2>();
+            for (int i = 0; i < _texture2D.height; i++)
             {
-                LR.SetPosition(i, new Vector3(Random.Range(0,10), i, 0));
+                for (int j = 0; j < _texture2D.width; j++)
+                {
+                    var c = _texture2D.GetPixel(j, i);
+                    if (c == Color.black)
+                    {
+                        temp.Add(new Vector2(i, j));
+                        break;
+                    }
+                }
             }
 
-            generateMesh(LR);
+            _lineRenderer.positionCount = temp.Count;
+            var offset = temp[0].y;
+            for (int i = 0; i < temp.Count; i++)
+            {
+                var t = temp[i];
+                t.y -= offset;
+                temp[i] = t;
+
+                _lineRenderer.SetPosition(i, new Vector3(temp[i].x, temp[i].y, 0));
+            }
+
+            _lineRenderer.Simplify(1);
+
+            GameObject outsideObj = new GameObject("outsideObj");
+            _outsideMeshFilter = outsideObj.AddComponent<MeshFilter>();
+            _outsideMeshRenderer = outsideObj.AddComponent<MeshRenderer>();
+            _outsideMeshRenderer.material = _material;
+            _outsideMesh = new Mesh();
+            _outsideMeshFilter.mesh = _outsideMesh;
+            _outsideMeshRenderer.enabled = true;
+            outsideObj.transform.SetParent(transform);
+
+            GameObject insideObj = new GameObject("insideObj");
+            _insideMeshFilter = insideObj.AddComponent<MeshFilter>();
+            _insideMeshRenderer = insideObj.AddComponent<MeshRenderer>();
+            _insideMeshRenderer.material = _material;
+            _insideMesh = new Mesh();
+            _insideMeshFilter.mesh = _insideMesh;
+            _insideMeshRenderer.enabled = true;
+            insideObj.transform.SetParent(transform);
+
+            _sides = Mathf.Max(3, _sides);
+            GenerateMesh(_radiusOne, _outsideMesh, _outsideMeshFilter);
+            GenerateMesh(_radiusTwo, _insideMesh, _insideMeshFilter);
+
+            outsideObj.transform.localRotation = Quaternion.Euler(0, 0, 90);
+            outsideObj.transform.localScale = Vector3.one * 0.008f;
+
+            insideObj.transform.localRotation = Quaternion.Euler(0, 0, 90);
+            insideObj.transform.localScale = Vector3.one * 0.008f;
         }
 
-        /// <summary>
-        /// Return a mesh based on a linerenderer
-        /// </summary>
-        private Mesh generateMesh(LineRenderer LR)
+        private void GenerateMesh(float radius, Mesh mesh, MeshFilter meshFilter)
         {
-            Mesh mesh = new Mesh();
+            if (mesh == null || _lineRenderer.positionCount <= 1)
+            {
+                return;
+            }
 
-            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-            meshFilter.mesh = mesh;
-            MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            var verticesLength = _sides * _lineRenderer.positionCount;
+            var vertices = new Vector3[verticesLength];
 
-            Vector3[] vertices = generateVertices(LR, 8, 1);
-            int[] triangles = generateTriangles(vertices);
+            var indices = GenerateIndices();
+            var uvs = GenerateUVs();
+
+            if (verticesLength > mesh.vertexCount)
+            {
+                mesh.vertices = vertices;
+                mesh.triangles = indices;
+                mesh.uv = uvs;
+            }
+            else
+            {
+                mesh.triangles = indices;
+                mesh.vertices = vertices;
+                mesh.uv = uvs;
+            }
+
+
+            var currentVertIndex = 0;
+
+            for (int i = 0; i < _lineRenderer.positionCount; i++)
+            {
+                var circle = CalculateCircle(i, radius);
+                foreach (var vertex in circle)
+                {
+                    vertices[currentVertIndex++] = _useWorldSpace ? transform.InverseTransformPoint(vertex) : vertex;
+                }
+            }
 
             mesh.vertices = vertices;
-            mesh.triangles = triangles;
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
 
-            return mesh;
+            meshFilter.mesh = mesh;
         }
 
-        /// <summary>
-        /// return an array of vertices based on a Linerenderer
-        /// </summary>
-        private Vector3[] generateVertices(LineRenderer LR, int nbVerticesPerLevel, float radius)
+        private Vector2[] GenerateUVs()
         {
-            List<Vector3> result = new List<Vector3>();
-            float angle;
+            var uvs = new Vector2[_lineRenderer.positionCount * _sides];
 
-            for (int i = 0; i < LR.positionCount; i++)
+            for (int segment = 0; segment < _lineRenderer.positionCount; segment++)
             {
-                for (int j = 0; j < nbVerticesPerLevel; j++)
+                for (int side = 0; side < _sides; side++)
                 {
-                    angle = j * Mathf.PI * 2f / nbVerticesPerLevel;
-                    result.Add(new Vector3(Mathf.Cos(angle) * radius, LR.GetPosition(i).y, Mathf.Sin(angle) * radius));
+                    var vertIndex = (segment * _sides + side);
+                    var u = side / (_sides - 1f);
+                    var v = segment / (_lineRenderer.positionCount - 1f);
+
+                    uvs[vertIndex] = new Vector2(u, v);
                 }
             }
 
-            return result.ToArray();
+            return uvs;
         }
 
-        /// <summary>
-        /// return an array of triangle based on an array of vertices
-        /// </summary>
-        private int[] generateTriangles(Vector3[] Vertices)
+        private int[] GenerateIndices()
         {
-            if (Vertices.Length % 8 != 0)
+            // Two triangles and 3 vertices
+            var indices = new int[_lineRenderer.positionCount * _sides * 2 * 3];
+
+            var currentIndicesIndex = 0;
+            for (int segment = 1; segment < _lineRenderer.positionCount; segment++)
             {
-                Debug.LogError("Wrong vertices number input !?");
-                return null;
-            }
-
-            int nbLevel = Vertices.Length / 8;
-
-            List<int> triangles = new List<int>();
-
-            for (int i = 0; i < nbLevel - 1; i++) //iterate over the different Level (1 lvl = 8 vertices)
-            {
-                for (int j = 0; j < 7; j++) //iterate over the vertices from 0 to 6
+                for (int side = 0; side < _sides; side++)
                 {
-                    // triangle 1 :
-                    triangles.Add(i * 8 + j + 1);
-                    triangles.Add(i * 8 + j);
-                    triangles.Add(i * 8 + j + 8);
+                    var vertIndex = (segment * _sides + side);
+                    var prevVertIndex = vertIndex - _sides;
 
-                    // triangle 2:
-                    triangles.Add(i * 8 + j + 9);
-                    triangles.Add(i * 8 + j + 1);
-                    triangles.Add(i * 8 + j + 8);
+                    // Triangle one
+                    indices[currentIndicesIndex++] = prevVertIndex;
+                    indices[currentIndicesIndex++] = (side == _sides - 1) ? (vertIndex - (_sides - 1)) : (vertIndex + 1);
+                    indices[currentIndicesIndex++] = vertIndex;
+
+
+                    // Triangle two
+                    indices[currentIndicesIndex++] = (side == _sides - 1) ? (prevVertIndex - (_sides - 1)) : (prevVertIndex + 1);
+                    indices[currentIndicesIndex++] = (side == _sides - 1) ? (vertIndex - (_sides - 1)) : (vertIndex + 1);
+                    indices[currentIndicesIndex++] = prevVertIndex;
                 }
-
-                //create the last 2 triangles of the lvl (vertex 7)
-                // triangle 1 :
-                triangles.Add(i * 8 + 0);
-                triangles.Add(i * 8 + 7);
-                triangles.Add(i * 8 + 15);
-
-                // triangle 2:
-                triangles.Add(i * 8 + 8);
-                triangles.Add(i * 8 + 0);
-                triangles.Add(i * 8 + 15);
             }
 
-            return triangles.ToArray();
+            return indices;
+        }
+
+        private Vector3[] CalculateCircle(int index, float radius)
+        {
+            var dirCount = 0;
+            var forward = Vector3.zero;
+
+            // If not first index
+            if (index > 0)
+            {
+                forward += (_lineRenderer.GetPosition(index) - _lineRenderer.GetPosition(index - 1)).normalized;
+                dirCount++;
+            }
+
+            // If not last index
+            if (index < _lineRenderer.positionCount - 1)
+            {
+                forward += (_lineRenderer.GetPosition(index + 1) - _lineRenderer.GetPosition(index)).normalized;
+                dirCount++;
+            }
+
+            // Forward is the average of the connecting edges directions
+            forward = (forward / dirCount).normalized;
+            var side = Vector3.Cross(forward, forward + new Vector3(.123564f, .34675f, .756892f)).normalized;
+            var up = Vector3.Cross(forward, side).normalized;
+
+            var circle = new Vector3[_sides];
+            var angle = 0f;
+            var angleStep = (2 * Mathf.PI) / _sides;
+
+            var t = index / (_lineRenderer.positionCount - 1f);
+            var r = radius;
+
+            for (int i = 0; i < _sides; i++)
+            {
+                var x = Mathf.Cos(angle);
+                var y = Mathf.Sin(angle);
+
+                circle[i] = _lineRenderer.GetPosition(index) + side * x * r + up * y * r;
+
+                angle += angleStep;
+            }
+
+            return circle;
         }
     }
 }
