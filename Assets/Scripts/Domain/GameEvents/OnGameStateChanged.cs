@@ -1,6 +1,6 @@
 using Domain.Enum;
 
-namespace Domain.Events
+namespace Domain.GameEvents
 {
     public class OnGameStateChanged
     {

@@ -17,6 +17,7 @@ namespace Services.ConfigService.Service
 
         public ActionResult IsConfigLoaded => _isConfigLoaded;
         public float LoadProgress => _loadProgress;
+        public int MaxLevelCount => _gameConfig.LevelSequence.AllLevelsData.Length;
 
         public GameConfigService()
         {
@@ -52,14 +53,9 @@ namespace Services.ConfigService.Service
             _isConfigLoaded.ChangeResult(ActionResultType.Success, string.Empty, 100);
         }
 
-        public GameObject GetLevelObject(int levelIndex)
+        public LevelData GetLevelData(int levelIndex)
         {
-            return _gameConfig.LevelSequence.AllLevelsData[levelIndex].LevelPrefab;
-        }
-
-        public GameObject GetLevelCup(int levelIndex)
-        {
-            return _gameConfig.LevelSequence.AllLevelsData[levelIndex].Cup;
+            return _gameConfig.LevelSequence.AllLevelsData[levelIndex];
         }
     }
 }

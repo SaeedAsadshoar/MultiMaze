@@ -51,8 +51,6 @@ namespace DI
 
             Container.Bind<IUpdateService>().To<UpdateService>().AsSingle().NonLazy();
 
-            Container.BindInterfacesTo<IUpdateService>().AsSingle().NonLazy();
-
             Container.Bind<IToastService>().To<ToastService>().AsSingle().NonLazy();
             Container.Bind<IMemoryPoolService>().To<MemoryPoolService>().AsSingle().NonLazy();
             Container.Bind<IAudioService>().To<AudioService>().AsSingle().NonLazy();

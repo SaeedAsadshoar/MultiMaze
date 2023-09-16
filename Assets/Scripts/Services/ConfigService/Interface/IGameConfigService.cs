@@ -7,8 +7,8 @@ namespace Services.ConfigService.Interface
     {
         ActionResult IsConfigLoaded { get; }
         float LoadProgress { get; }
+        int MaxLevelCount { get; }
         void LoadGameConfig();
-        GameObject GetLevelObject(int levelIndex);
-        GameObject GetLevelCup(int levelIndex);
+        LevelData GetLevelData(int levelIndex);
     }
 }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Services.LevelLoader.Interface
 {
     public interface ILevelLoaderService

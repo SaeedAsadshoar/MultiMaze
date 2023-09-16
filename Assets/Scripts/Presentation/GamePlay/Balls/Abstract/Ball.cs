@@ -5,10 +5,12 @@ using Zenject;
 
 namespace Presentation.GamePlay.Balls.Abstract
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class Ball<T> : MonoBehaviour, IPoolable<IMemoryPool>, IFactoryObject, IPoolObject, IBall
     {
         private Transform _transform;
         private IMemoryPool _memoryPool;
+        private Rigidbody _rigidbody;
 
         public Transform ObjectRoot
         {
@@ -20,6 +22,16 @@ namespace Presentation.GamePlay.Balls.Abstract
         }
 
         public IMemoryPool MemoryPool => _memoryPool;
+        public Transform RootTransform => ObjectRoot;
+
+        public Rigidbody ObjectRigidbody
+        {
+            get
+            {
+                if (_rigidbody == null) _rigidbody = GetComponent<Rigidbody>();
+                return _rigidbody;
+            }
+        }
 
         public void OnDespawned()
         {
@@ -36,7 +48,12 @@ namespace Presentation.GamePlay.Balls.Abstract
             _memoryPool.Despawn(this);
             _memoryPool = null;
         }
-        
+
+        public void Kill()
+        {
+            BackToPool();
+        }
+
         public class Factory : PlaceholderFactory<T>
         {
         }

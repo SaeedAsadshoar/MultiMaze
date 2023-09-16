@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Domain.Constants;
 using Domain.Enum;
-using Domain.Events;
+using Domain.GameEvents;
 using Presentation.UI;
 using Services.ConfigService.Interface;
 using Services.EventSystem.Interface;
@@ -63,11 +63,6 @@ namespace Managers
             {
                 //todo reload game
                 return;
-            }
-
-            if (_gameConfigService.IsConfigLoaded.ActionState == ActionResultType.Success)
-            {
-                //todo load current level
             }
 
             uiLoading.SetLoading("Opening Level");

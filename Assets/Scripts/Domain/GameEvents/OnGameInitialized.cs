@@ -1,4 +1,4 @@
-﻿namespace Domain.Events
+﻿namespace Domain.GameEvents
 {
     public class OnGameInitialized
     {

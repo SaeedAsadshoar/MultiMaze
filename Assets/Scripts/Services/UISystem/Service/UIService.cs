@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Domain.Constants;
 using Domain.Data;
 using Domain.Enum;
-using Domain.Events;
+using Domain.GameEvents;
 using Services.EventSystem.Interface;
 using Services.FactorySystem.Interface;
 using Services.UISystem.Interface;
