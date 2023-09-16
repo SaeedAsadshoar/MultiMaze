@@ -44,6 +44,7 @@ namespace Managers
         {
             await _factoryService.LoadUiPanels();
             await _factoryService.LoadUiElements();
+            await _factoryService.LoadBalls();
 
             var uiLoading = _uiService.OpenPage(UiPanelNames.UILoading, null, null) as UILoading;
             uiLoading.SetLoading("Load Config");

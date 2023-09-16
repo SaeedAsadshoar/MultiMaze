@@ -38,12 +38,10 @@ namespace DI
             Container.Bind<ILevelLoaderService>().To<LevelLoaderService>().AsSingle().NonLazy();
 
             Container.Bind<IFactoryService>().To<FactoryService>().AsSingle().NonLazy();
-            Container.Bind<IEffectFactory>().To<EffectFactory>().AsSingle().NonLazy();
             Container.Bind<IDataModelFactory>().To<DataModelFactory>().AsSingle().NonLazy();
-            Container.Bind<IEnemyFactory>().To<EnemyFactory>().AsSingle().NonLazy();
             Container.Bind<IUIElementFactory>().To<UIElementFactory>().AsSingle().NonLazy();
             Container.Bind<IUIScreenFactory>().To<UIScreenFactory>().AsSingle().NonLazy();
-            Container.Bind<IPlayerFactory>().To<PlayerFactory>().AsSingle().NonLazy();
+            Container.Bind<IBallFactory>().To<BallFactory>().AsSingle().NonLazy();
 
             Container.Bind<IInGameRepositoryService>().To<InGameRepositoryService>().AsSingle().NonLazy();
 
