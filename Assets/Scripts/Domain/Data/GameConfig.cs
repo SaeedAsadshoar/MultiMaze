@@ -10,7 +10,11 @@ namespace Domain.Data
         [Header("Touch sensitivity"), SerializeField]
         private TouchSettings _touchSettings;
 
+        [Header("Balls Physics"), SerializeField]
+        private BallPhysicsSettings[] _ballPhysicsSettings;
+
         public LevelSequence LevelSequence => _levelSequence;
         public TouchSettings TouchSettings => _touchSettings;
+        public BallPhysicsSettings[] BallPhysicsSettings => _ballPhysicsSettings;
     }
 }

@@ -3,6 +3,7 @@ using Domain.Enum;
 using Domain.GameEvents;
 using Domain.Interface;
 using Presentation.GamePlay.Balls.Interface;
+using Services.ConfigService.Interface;
 using Services.EventSystem.Interface;
 using Services.InGameRepositories.Interface;
 using UnityEngine;
@@ -16,13 +17,15 @@ namespace Presentation.GamePlay.Balls.Abstract
         private Transform _transform;
         private IMemoryPool _memoryPool;
         private Rigidbody _rigidbody;
+        private PhysicMaterial _physicMaterial;
         private bool _isInsideCup;
 
         private Transform _ballFreeZonePlace;
         private Transform _ballInPuzzlePlace;
 
-        private IEventService _eventService;
-        private IInGameRepositoryService _inGameRepositoryService;
+        protected IEventService EventService;
+        protected IInGameRepositoryService InGameRepositoryService;
+        protected IGameConfigService GameConfigService;
 
         public IMemoryPool MemoryPool => _memoryPool;
         public Transform RootTransform => ObjectRoot;
@@ -46,12 +49,23 @@ namespace Presentation.GamePlay.Balls.Abstract
             }
         }
 
+        public virtual PhysicMaterial PhysicMaterial
+        {
+            get
+            {
+                if (_physicMaterial == null) _physicMaterial = GetComponent<Collider>().material;
+                return _physicMaterial;
+            }
+        }
+
         [Inject]
         private void Init(IEventService eventService,
-            IInGameRepositoryService inGameRepositoryService)
+            IInGameRepositoryService inGameRepositoryService,
+            IGameConfigService gameConfigService)
         {
-            _eventService = eventService;
-            _inGameRepositoryService = inGameRepositoryService;
+            EventService = eventService;
+            InGameRepositoryService = inGameRepositoryService;
+            GameConfigService = gameConfigService;
         }
 
         public void OnDespawned()
@@ -81,30 +95,30 @@ namespace Presentation.GamePlay.Balls.Abstract
         public virtual void MoveInsideCup()
         {
             _isInsideCup = true;
-            _eventService.Fire(GameEvents.ON_BALL_ENTERED_CUP, new OnBallEnteredCup());
+            EventService.Fire(GameEvents.ON_BALL_ENTERED_CUP, new OnBallEnteredCup());
         }
 
         public virtual void ExitPuzzle()
         {
-            _ballFreeZonePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallFreeZonePlace);
-            _ballInPuzzlePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace);
+            _ballFreeZonePlace ??= InGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallFreeZonePlace);
+            _ballInPuzzlePlace ??= InGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace);
 
             if (RootTransform.parent == _ballInPuzzlePlace)
             {
                 RootTransform.SetParent(_ballFreeZonePlace);
-                _eventService.Fire(GameEvents.ON_BALL_EXIT_PUZZLE, new OnBallExitPuzzle());
+                EventService.Fire(GameEvents.ON_BALL_EXIT_PUZZLE, new OnBallExitPuzzle());
             }
         }
 
         public void EnterPuzzle()
         {
-            _ballFreeZonePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallFreeZonePlace);
-            _ballInPuzzlePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace);
+            _ballFreeZonePlace ??= InGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallFreeZonePlace);
+            _ballInPuzzlePlace ??= InGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace);
 
             if (RootTransform.parent == _ballFreeZonePlace)
             {
                 RootTransform.SetParent(_ballInPuzzlePlace);
-                _eventService.Fire(GameEvents.ON_BALL_ENTERED_PUZZLE, new OnBallEnteredPuzzle());
+                EventService.Fire(GameEvents.ON_BALL_ENTERED_PUZZLE, new OnBallEnteredPuzzle());
             }
         }
 

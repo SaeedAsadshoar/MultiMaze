@@ -57,5 +57,16 @@ namespace Services.ConfigService.Service
         {
             return _gameConfig.LevelSequence.AllLevelsData[levelIndex];
         }
+
+        public BallPhysicsSettings GetBallPhysicsSetting(BallTypes ballType)
+        {
+            foreach (var ballPhysicsSetting in _gameConfig.BallPhysicsSettings)
+            {
+                if (ballType == ballPhysicsSetting.BallType)
+                    return ballPhysicsSetting;
+            }
+
+            return new BallPhysicsSettings();
+        }
     }
 }

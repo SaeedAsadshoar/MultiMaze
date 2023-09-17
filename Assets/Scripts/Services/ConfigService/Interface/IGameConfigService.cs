@@ -1,4 +1,5 @@
 using Domain.Data;
+using Domain.Enum;
 using UnityEngine;
 
 namespace Services.ConfigService.Interface
@@ -11,5 +12,6 @@ namespace Services.ConfigService.Interface
         int MaxLevelCount { get; }
         void LoadGameConfig();
         LevelData GetLevelData(int levelIndex);
+        BallPhysicsSettings GetBallPhysicsSetting(BallTypes ballType);
     }
 }
