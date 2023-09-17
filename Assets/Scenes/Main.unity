@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b355a2e027df4799a73350716adb8667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _texture2D: {fileID: 6192944022281365145, guid: 00cd0b1feb81eb64886e80c07a819e24, type: 3}
+  _texture2D: {fileID: 6192944022281365145, guid: 6bcf4fe9b71beb2448bb6b28c0c2a16a, type: 3}
   _lineRenderer: {fileID: 1802429586}
   _sides: 8
   _radiusOne: 40
@@ -1116,6 +1116,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8702888916092926608, guid: b0eef356a21fefb4d963ee174bd014ab, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9148373128726831354, guid: b0eef356a21fefb4d963ee174bd014ab, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1366,7 +1370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a67c59afee9455c814da47ce556ef9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotateSpeed: 50
+  _rotateSpeed: 200
 --- !u!1 &1991067640
 GameObject:
   m_ObjectHideFlags: 0
