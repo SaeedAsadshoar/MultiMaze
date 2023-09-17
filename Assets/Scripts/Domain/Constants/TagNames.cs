@@ -7,5 +7,6 @@
         public const string PLAYER = "Player";
         public const string DRAG_PANEL = "DragPanel";
         public const string TOAST_PANEL = "ToastPanel";
+        public const string BALL = "Ball";
     }
 }

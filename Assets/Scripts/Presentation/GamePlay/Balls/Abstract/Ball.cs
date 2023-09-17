@@ -1,5 +1,10 @@
+using Domain.Constants;
+using Domain.Enum;
+using Domain.GameEvents;
 using Domain.Interface;
 using Presentation.GamePlay.Balls.Interface;
+using Services.EventSystem.Interface;
+using Services.InGameRepositories.Interface;
 using UnityEngine;
 using Zenject;
 
@@ -11,8 +16,19 @@ namespace Presentation.GamePlay.Balls.Abstract
         private Transform _transform;
         private IMemoryPool _memoryPool;
         private Rigidbody _rigidbody;
+        private bool _isInsideCup;
 
-        public Transform ObjectRoot
+        private Transform _ballFreeZonePlace;
+        private Transform _ballInPuzzlePlace;
+
+        private IEventService _eventService;
+        private IInGameRepositoryService _inGameRepositoryService;
+
+        public IMemoryPool MemoryPool => _memoryPool;
+        public Transform RootTransform => ObjectRoot;
+        public bool IsInsideCup => _isInsideCup;
+
+        public virtual Transform ObjectRoot
         {
             get
             {
@@ -21,10 +37,7 @@ namespace Presentation.GamePlay.Balls.Abstract
             }
         }
 
-        public IMemoryPool MemoryPool => _memoryPool;
-        public Transform RootTransform => ObjectRoot;
-
-        public Rigidbody ObjectRigidbody
+        public virtual Rigidbody ObjectRigidbody
         {
             get
             {
@@ -33,12 +46,21 @@ namespace Presentation.GamePlay.Balls.Abstract
             }
         }
 
+        [Inject]
+        private void Init(IEventService eventService,
+            IInGameRepositoryService inGameRepositoryService)
+        {
+            _eventService = eventService;
+            _inGameRepositoryService = inGameRepositoryService;
+        }
+
         public void OnDespawned()
         {
         }
 
         public void OnSpawned(IMemoryPool memoryPool)
         {
+            _isInsideCup = false;
             _memoryPool = memoryPool;
         }
 
@@ -47,11 +69,30 @@ namespace Presentation.GamePlay.Balls.Abstract
             if (_memoryPool == null) return;
             _memoryPool.Despawn(this);
             _memoryPool = null;
+            _isInsideCup = false;
         }
 
-        public void Kill()
+        public virtual void Kill()
         {
             BackToPool();
+        }
+
+        public virtual void MoveInsideCup()
+        {
+            _isInsideCup = true;
+            _eventService.Fire(GameEvents.ON_BALL_ENTERED_CUP, new OnBallEnteredCup());
+        }
+
+        public virtual void ExitPuzzle()
+        {
+            _ballFreeZonePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallFreeZonePlace);
+            RootTransform.SetParent(_ballFreeZonePlace);
+        }
+
+        public void EnterPuzzle()
+        {
+            _ballInPuzzlePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace);
+            RootTransform.SetParent(_ballInPuzzlePlace);
         }
 
         public class Factory : PlaceholderFactory<T>

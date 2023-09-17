@@ -110,7 +110,7 @@ namespace Services.LevelLoader.Service
         {
             IBall ball = _factoryService.GetBall(BallTypes.SimpleBall) as IBall;
             _createdBalls.Add(ball);
-            ball.RootTransform.SetParent(_inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallPlace));
+            ball.RootTransform.SetParent(_inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace));
             ball.RootTransform.position = _currentLevelObj.transform.position;
 
             int count = _createdBalls.Count;

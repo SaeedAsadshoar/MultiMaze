@@ -4,7 +4,8 @@ namespace Domain.Enum
     {
         LevelPlace = 0,
         CupPlace = 1,
-        BallPlace = 2,
+        BallInPuzzlePlace = 2,
         LevelPlaceRigidBody = 3,
+        BallFreeZonePlace = 4,
     }
 }

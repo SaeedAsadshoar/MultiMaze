@@ -9,6 +9,7 @@ TagManager:
   - UILoadingPlace
   - DragPanel
   - UIPlace
+  - Ball
   layers:
   - Default
   - TransparentFX
