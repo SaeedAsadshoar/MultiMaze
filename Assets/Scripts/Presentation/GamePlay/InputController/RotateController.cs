@@ -11,18 +11,21 @@ namespace Presentation.GamePlay.InputController
 {
     public class RotateController : MonoBehaviour
     {
-        [SerializeField] private float _rotateSpeed = 5;
-
+        [SerializeField] private float _stopRotateSpeed = 20;
+        [SerializeField] private float _distanceRatio;
+        [SerializeField] private float _centerDistanceRatio;
         private Camera _mainCamera;
 
         private IInGameRepositoryService _inGameRepositoryService;
         private Transform _levelPlaceTransform;
-        private Rigidbody _levelPlaceRigidbody;
 
         private float _startValue;
 
-        private Quaternion _destRotation;
         private bool _canRotate;
+        private Vector3 _rotationCenterPos;
+        private Vector3 _preTouchPos;
+        private float _rotationSpeed;
+        private float _deltaDegree;
 
         [Inject]
         private void Init(IInGameRepositoryService inGameRepositoryService,
@@ -35,7 +38,6 @@ namespace Presentation.GamePlay.InputController
             eventService.Subscribe<OnGameFinished>(GameEvents.ON_GAME_FINISHED, OnGameFinished);
 
             updateService.AddToUpdate(UpdateFunc, UnityUpdateType.Update);
-            updateService.AddToUpdate(FixedUpdateFunc, UnityUpdateType.FixedUpdate);
         }
 
         private void Awake()
@@ -50,35 +52,47 @@ namespace Presentation.GamePlay.InputController
             if (Input.GetMouseButtonDown(0))
             {
                 _startValue = CalculateRotationDegree(Input.mousePosition);
+                _preTouchPos = Input.mousePosition;
             }
 
             if (Input.GetMouseButton(0))
             {
                 var currentDegree = CalculateRotationDegree(Input.mousePosition);
-                var delta = currentDegree - _startValue;
-                _destRotation = Quaternion.Euler(0, 0, _destRotation.eulerAngles.z + delta);
+                var degree = currentDegree - _startValue;
+
+                //bug in left side - unity suddenly return 359 or -359 we check it here for prevent bug
+                if (degree is < 10 and > -10)
+                {
+                    _deltaDegree = degree;
+                }
+
+                var distance = Vector3.Distance(Input.mousePosition, _preTouchPos);
+                _rotationSpeed = distance * _distanceRatio;
+
+                distance = Vector3.Distance(Input.mousePosition, _rotationCenterPos);
+                _deltaDegree *= distance * _centerDistanceRatio;
                 _startValue = currentDegree;
             }
-        }
+            else
+            {
+                _deltaDegree = Mathf.Lerp(_deltaDegree, 0, _stopRotateSpeed * Time.deltaTime);
+                _rotationSpeed = Mathf.Lerp(_rotationSpeed, 0, _stopRotateSpeed * Time.deltaTime);
+            }
 
-        private void FixedUpdateFunc()
-        {
-            if (!_canRotate) return;
-            _levelPlaceTransform.rotation = Quaternion.Slerp(_levelPlaceTransform.rotation, _destRotation, _rotateSpeed * Time.deltaTime);
-            //_levelPlaceRigidbody.MoveRotation(_destRotation);
+            _levelPlaceTransform.Rotate(Vector3.forward, _deltaDegree * _rotationSpeed);
         }
 
         private void OnStartLoadLevel(OnLoadLevelStart onLoadLevelStart)
         {
             _canRotate = false;
-            _levelPlaceTransform.rotation = _destRotation = Quaternion.identity;
         }
 
         private void OnLoadLevelComplete(OnLoadLevelComplete onLoadLevelComplete)
         {
-            _levelPlaceRigidbody = _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.LevelPlaceRigidBody).GetComponent<Rigidbody>();
+            _rotationSpeed = _deltaDegree = _rotationCenterPos.z = 0;
+            _levelPlaceTransform.rotation = Quaternion.identity;
+            _rotationCenterPos = _mainCamera.WorldToScreenPoint(_levelPlaceTransform.position);
             _canRotate = true;
-            _levelPlaceTransform.rotation = _destRotation = Quaternion.identity;
         }
 
         private void OnGameFinished(OnGameFinished onGameFinished)
@@ -88,10 +102,7 @@ namespace Presentation.GamePlay.InputController
 
         private float CalculateRotationDegree(Vector3 touchPosition)
         {
-            Vector3 movePos = new Vector3(touchPosition.x, touchPosition.y, 0);
-            var objectPos = _mainCamera.WorldToScreenPoint(_levelPlaceTransform.position);
-            objectPos.z = 0;
-            var movement = movePos - objectPos;
+            var movement = touchPosition - _rotationCenterPos;
             var target = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
             return target;
         }
