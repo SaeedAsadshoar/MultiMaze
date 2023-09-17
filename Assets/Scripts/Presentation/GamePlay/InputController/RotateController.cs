@@ -1,6 +1,7 @@
 using Domain.Constants;
 using Domain.Enum;
 using Domain.GameEvents;
+using Services.ConfigService.Interface;
 using Services.EventSystem.Interface;
 using Services.InGameRepositories.Interface;
 using Services.UpdateSystem.Interface;
@@ -11,16 +12,14 @@ namespace Presentation.GamePlay.InputController
 {
     public class RotateController : MonoBehaviour
     {
-        [SerializeField] private float _stopRotateSpeed = 20;
-        [SerializeField] private float _distanceRatio;
-        [SerializeField] private float _centerDistanceRatio;
         private Camera _mainCamera;
 
         private IInGameRepositoryService _inGameRepositoryService;
+        private IGameConfigService _gameConfigService;
+
         private Transform _levelPlaceTransform;
 
         private float _startValue;
-
         private bool _canRotate;
         private Vector3 _rotationCenterPos;
         private Vector3 _preTouchPos;
@@ -30,9 +29,12 @@ namespace Presentation.GamePlay.InputController
         [Inject]
         private void Init(IInGameRepositoryService inGameRepositoryService,
             IEventService eventService,
-            IUpdateService updateService)
+            IUpdateService updateService,
+            IGameConfigService gameConfigService)
         {
             _inGameRepositoryService = inGameRepositoryService;
+            _gameConfigService = gameConfigService;
+
             eventService.Subscribe<OnLoadLevelStart>(GameEvents.ON_LOAD_LEVEL_START, OnStartLoadLevel);
             eventService.Subscribe<OnLoadLevelComplete>(GameEvents.ON_LOAD_LEVEL_COMPLETE, OnLoadLevelComplete);
             eventService.Subscribe<OnGameFinished>(GameEvents.ON_GAME_FINISHED, OnGameFinished);
@@ -67,16 +69,16 @@ namespace Presentation.GamePlay.InputController
                 }
 
                 var distance = Vector3.Distance(Input.mousePosition, _preTouchPos);
-                _rotationSpeed = distance * _distanceRatio;
+                _rotationSpeed = distance * _gameConfigService.TouchSetting.DeltaDistanceRatio;
 
                 distance = Vector3.Distance(Input.mousePosition, _rotationCenterPos);
-                _deltaDegree *= distance * _centerDistanceRatio;
+                _deltaDegree *= distance * _gameConfigService.TouchSetting.CenterDistanceRatio;
                 _startValue = currentDegree;
             }
             else
             {
-                _deltaDegree = Mathf.Lerp(_deltaDegree, 0, _stopRotateSpeed * Time.deltaTime);
-                _rotationSpeed = Mathf.Lerp(_rotationSpeed, 0, _stopRotateSpeed * Time.deltaTime);
+                _deltaDegree = Mathf.Lerp(_deltaDegree, 0, _gameConfigService.TouchSetting.StopRotateSpeed * Time.deltaTime);
+                _rotationSpeed = Mathf.Lerp(_rotationSpeed, 0, _gameConfigService.TouchSetting.StopRotateSpeed * Time.deltaTime);
             }
 
             _levelPlaceTransform.Rotate(Vector3.forward, _deltaDegree * _rotationSpeed);

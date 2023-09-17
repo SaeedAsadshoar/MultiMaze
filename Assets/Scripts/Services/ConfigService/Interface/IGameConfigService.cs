@@ -6,6 +6,7 @@ namespace Services.ConfigService.Interface
     public interface IGameConfigService
     {
         ActionResult IsConfigLoaded { get; }
+        TouchSettings TouchSetting { get; }
         float LoadProgress { get; }
         int MaxLevelCount { get; }
         void LoadGameConfig();

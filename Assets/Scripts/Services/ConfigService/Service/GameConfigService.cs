@@ -3,7 +3,6 @@ using Domain.Constants;
 using Domain.Data;
 using Domain.Enum;
 using Services.ConfigService.Interface;
-using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -16,6 +15,7 @@ namespace Services.ConfigService.Service
         private float _loadProgress;
 
         public ActionResult IsConfigLoaded => _isConfigLoaded;
+        public TouchSettings TouchSetting => _gameConfig.TouchSettings;
         public float LoadProgress => _loadProgress;
         public int MaxLevelCount => _gameConfig.LevelSequence.AllLevelsData.Length;
 
