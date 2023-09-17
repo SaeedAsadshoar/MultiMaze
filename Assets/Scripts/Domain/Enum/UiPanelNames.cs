@@ -4,5 +4,7 @@
     {
         UILoading = 0,
         UIGame = 1,
+        UILevelPassed = 2,
+        UILevelFailed = 3,
     }
 }

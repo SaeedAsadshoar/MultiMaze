@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelNo: 1
   _ballCountInBase: 60
-  _ballNeededToFinish: 0f000000140000001e000000
+  _ballNeededToFinish: 0a0000000a0000000f000000
   _ballSpawnPosition: {x: 0, y: 0, z: 0}
   _levelPrefab: {fileID: 2254242813367837492, guid: 4342f9b169cb7a441be1e9a45560f635, type: 3}
   _cup: {fileID: 231006977627930031, guid: 20691cecedb39534d97f48f01df0c51d, type: 3}

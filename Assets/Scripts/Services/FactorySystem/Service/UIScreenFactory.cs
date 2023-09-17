@@ -18,6 +18,8 @@ namespace Services.FactorySystem.Service
 
         private UILoading.Factory _uiLoadingFactory;
         private UIGame.Factory _uiGameFactory;
+        private UILevelFailed.Factory _uiLevelFailedFactory;
+        private UILevelPassed.Factory _uiLevelPassedFactory;
 
         public UIScreenFactory(DiContainer diContainer)
         {
@@ -47,6 +49,10 @@ namespace Services.FactorySystem.Service
                     return _uiLoadingFactory.Create();
                 case UiPanelNames.UIGame:
                     return _uiGameFactory.Create();
+                case UiPanelNames.UILevelPassed:
+                    return _uiLevelPassedFactory.Create();
+                case UiPanelNames.UILevelFailed:
+                    return _uiLevelFailedFactory.Create();
             }
 
             return null;
@@ -62,6 +68,12 @@ namespace Services.FactorySystem.Service
                 case UiPanelNames.UIGame:
                     LoadFactory<UIGame, UIGame.Factory>(panelName.ToString(), panelName, _diContainer);
                     break;
+                case UiPanelNames.UILevelPassed:
+                    LoadFactory<UILevelPassed, UILevelPassed.Factory>(panelName.ToString(), panelName, _diContainer);
+                    break;
+                case UiPanelNames.UILevelFailed:
+                    LoadFactory<UILevelFailed, UILevelFailed.Factory>(panelName.ToString(), panelName, _diContainer);
+                    break;
             }
         }
 
@@ -73,6 +85,10 @@ namespace Services.FactorySystem.Service
                     return _uiLoadingFactory != null;
                 case UiPanelNames.UIGame:
                     return _uiGameFactory != null;
+                case UiPanelNames.UILevelPassed:
+                    return _uiLevelPassedFactory != null;
+                case UiPanelNames.UILevelFailed:
+                    return _uiLevelFailedFactory != null;
             }
 
             return false;
@@ -93,6 +109,12 @@ namespace Services.FactorySystem.Service
                         break;
                     case UiPanelNames.UIGame:
                         _uiGameFactory = diContainer.Resolve<UIGame.Factory>();
+                        break;
+                    case UiPanelNames.UILevelPassed:
+                        _uiLevelPassedFactory = diContainer.Resolve<UILevelPassed.Factory>();
+                        break;
+                    case UiPanelNames.UILevelFailed:
+                        _uiLevelFailedFactory = diContainer.Resolve<UILevelFailed.Factory>();
                         break;
                 }
             }

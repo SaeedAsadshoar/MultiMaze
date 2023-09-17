@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Domain.Constants;
 using Domain.Data;
 using Domain.Enum;
@@ -6,12 +7,14 @@ using Domain.GameEvents;
 using Extension;
 using Presentation.GamePlay.Balls.Interface;
 using Presentation.GamePlay.Levels.Interface;
+using Presentation.UI;
 using Services.ConfigService.Interface;
 using Services.EventSystem.Interface;
 using Services.FactorySystem.Interface;
 using Services.InGameRepositories.Interface;
 using Services.LevelLoader.Interface;
 using Services.StorageSystem.Interface;
+using Services.UISystem.Interface;
 using Services.UpdateSystem.Interface;
 using UnityEngine;
 
@@ -30,13 +33,16 @@ namespace Services.LevelLoader.Service
         private readonly IUpdateService _updateService;
         private readonly IFactoryService _factoryService;
         private readonly IEventService _eventService;
+        private readonly IUIService _uiService;
+        private UILoading _uiLoading;
 
         public LevelLoaderService(IStorageService storageService,
             IGameConfigService gameConfigService,
             IInGameRepositoryService inGameRepositoryService,
             IUpdateService updateService,
             IFactoryService factoryService,
-            IEventService eventService)
+            IEventService eventService,
+            IUIService uiService)
         {
             _createdBalls = new List<IBall>();
             _storageService = storageService;
@@ -45,6 +51,7 @@ namespace Services.LevelLoader.Service
             _updateService = updateService;
             _factoryService = factoryService;
             _eventService = eventService;
+            _uiService = uiService;
         }
 
 
@@ -72,8 +79,16 @@ namespace Services.LevelLoader.Service
             LoadCurrentLevel();
         }
 
-        private void LoadLevel(int index)
+        private async void LoadLevel(int index)
         {
+            _uiService.ClosePage(UiPanelNames.UILevelFailed, null);
+            _uiService.ClosePage(UiPanelNames.UILevelPassed, null);
+            _uiLoading = _uiService.OpenPage(UiPanelNames.UILoading, null, null) as UILoading;
+            _uiLoading.SetLoading($"Load Level {index + 1}");
+            _uiLoading.SetProgress(0);
+
+            await Task.Delay(1000);
+
             ClearLevel();
             _eventService.Fire(GameEvents.ON_LOAD_LEVEL_START, new OnLoadLevelStart());
             _currentLevelData = _gameConfigService.GetLevelData(index);
@@ -89,7 +104,11 @@ namespace Services.LevelLoader.Service
             cupTransform.SetParent(_inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.CupPlace));
             cupTransform.ResetTransformation();
 
+            await Task.Delay(500);
+
             _inGameRepositoryService.AddRepository((int)InGameRepositoryTypes.LevelPlaceRigidBody, _currentLevelObj.GetComponent<ILevel>().LevelRigidbody.transform);
+            _uiLoading.SetProgress(1);
+            _uiLoading.SetLoading("Load Balls");
             CreateBalls();
         }
 
@@ -99,14 +118,24 @@ namespace Services.LevelLoader.Service
             {
                 CreateBall();
                 _updateService.DoInNextFrame(CreateBalls);
+                _uiLoading.SetProgress((float)_createdBalls.Count / (float)_currentLevelData.BallCountInBase);
             }
             else
             {
-                _eventService.Fire(GameEvents.ON_LOAD_LEVEL_COMPLETE,
-                    new OnLoadLevelComplete(_currentLevelData.BallNeededToFinish[0],
-                        _currentLevelData.BallNeededToFinish[1],
-                        _currentLevelData.BallNeededToFinish[2]));
+                OnLoadLevelFinished();
             }
+        }
+
+        private async void OnLoadLevelFinished()
+        {
+            await Task.Delay(1500);
+            _eventService.Fire(GameEvents.ON_LOAD_LEVEL_COMPLETE,
+                new OnLoadLevelComplete(_currentLevelData.BallNeededToFinish[0],
+                    _currentLevelData.BallNeededToFinish[1],
+                    _currentLevelData.BallNeededToFinish[2],
+                    _currentLevelData.BallCountInBase));
+            _uiService.ClosePage(UiPanelNames.UILoading, null);
+            _uiLoading = null;
         }
 
         private void CreateBall()

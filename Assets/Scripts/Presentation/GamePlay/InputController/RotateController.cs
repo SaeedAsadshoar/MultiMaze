@@ -1,4 +1,3 @@
-using System;
 using Domain.Constants;
 using Domain.Enum;
 using Domain.GameEvents;
@@ -33,6 +32,7 @@ namespace Presentation.GamePlay.InputController
             _inGameRepositoryService = inGameRepositoryService;
             eventService.Subscribe<OnLoadLevelStart>(GameEvents.ON_LOAD_LEVEL_START, OnStartLoadLevel);
             eventService.Subscribe<OnLoadLevelComplete>(GameEvents.ON_LOAD_LEVEL_COMPLETE, OnLoadLevelComplete);
+            eventService.Subscribe<OnGameFinished>(GameEvents.ON_GAME_FINISHED, OnGameFinished);
 
             updateService.AddToUpdate(UpdateFunc, UnityUpdateType.Update);
             updateService.AddToUpdate(FixedUpdateFunc, UnityUpdateType.FixedUpdate);
@@ -71,14 +71,19 @@ namespace Presentation.GamePlay.InputController
         private void OnStartLoadLevel(OnLoadLevelStart onLoadLevelStart)
         {
             _canRotate = false;
-            _destRotation = Quaternion.identity;
+            _levelPlaceTransform.rotation = _destRotation = Quaternion.identity;
         }
 
         private void OnLoadLevelComplete(OnLoadLevelComplete onLoadLevelComplete)
         {
             _levelPlaceRigidbody = _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.LevelPlaceRigidBody).GetComponent<Rigidbody>();
             _canRotate = true;
-            _destRotation = Quaternion.identity;
+            _levelPlaceTransform.rotation = _destRotation = Quaternion.identity;
+        }
+
+        private void OnGameFinished(OnGameFinished onGameFinished)
+        {
+            _canRotate = false;
         }
 
         private float CalculateRotationDegree(Vector3 touchPosition)

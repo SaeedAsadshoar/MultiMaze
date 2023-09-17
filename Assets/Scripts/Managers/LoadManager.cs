@@ -2,12 +2,10 @@ using System.Threading.Tasks;
 using Domain.Constants;
 using Domain.Enum;
 using Domain.GameEvents;
-using Presentation.UI;
 using Services.ConfigService.Interface;
 using Services.EventSystem.Interface;
 using Services.FactorySystem.Interface;
 using Services.LevelLoader.Interface;
-using Services.UISystem.Interface;
 using UnityEngine;
 using Zenject;
 
@@ -15,20 +13,17 @@ namespace Managers
 {
     public class LoadManager : MonoBehaviour
     {
-        private IUIService _uiService;
         private IGameConfigService _gameConfigService;
         private IEventService _eventService;
         private IFactoryService _factoryService;
         private ILevelLoaderService _levelLoaderService;
 
         [Inject]
-        private void Init(IUIService uiService,
-            IGameConfigService gameConfigService,
+        private void Init(IGameConfigService gameConfigService,
             IEventService eventService,
             IFactoryService factoryService,
             ILevelLoaderService levelLoaderService)
         {
-            _uiService = uiService;
             _gameConfigService = gameConfigService;
             _eventService = eventService;
             _factoryService = factoryService;
@@ -46,18 +41,12 @@ namespace Managers
             await _factoryService.LoadUiElements();
             await _factoryService.LoadBalls();
 
-            var uiLoading = _uiService.OpenPage(UiPanelNames.UILoading, null, null) as UILoading;
-            uiLoading.SetLoading("Load Config");
             _gameConfigService.LoadGameConfig();
 
             while (_gameConfigService.IsConfigLoaded.ActionState == ActionResultType.InProgress)
             {
-                uiLoading.SetProgress(_gameConfigService.LoadProgress);
                 await Task.Delay(10);
             }
-
-            uiLoading.SetProgress(1);
-            await Task.Delay(1000);
 
             if (_gameConfigService.IsConfigLoaded.ActionState == ActionResultType.Fail)
             {
@@ -65,12 +54,8 @@ namespace Managers
                 return;
             }
 
-            uiLoading.SetLoading("Opening Level");
-            _levelLoaderService.LoadCurrentLevel();
-            await Task.Delay(1000);
             _eventService.Fire(GameEvents.ON_GAME_INITIALIZED, new OnGameInitialized());
-            await Task.Delay(1000);
-            _uiService.ClosePage(UiPanelNames.UILoading, null);
+            _levelLoaderService.LoadCurrentLevel();
         }
     }
 }

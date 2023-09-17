@@ -781,6 +781,8 @@ GameObject:
   m_Component:
   - component: {fileID: 107984056101961911}
   - component: {fileID: 8122457128693052569}
+  - component: {fileID: 1168101470851813823}
+  - component: {fileID: 3964067263869105258}
   m_Layer: 5
   m_Name: UIGame
   m_TagString: Untagged
@@ -831,6 +833,39 @@ MonoBehaviour:
   _restartLevelButton: {fileID: 4632038851819330381}
   _ballMaxCountLabel: {fileID: 6526461236646572190}
   _ballInCupCountLabel: {fileID: 6091574552199700946}
+--- !u!225 &1168101470851813823
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6173747015985130691}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!95 &3964067263869105258
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6173747015985130691}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b15906f111dbbbd48bbeaa4e3b0a60ab, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6202620534912736428
 GameObject:
   m_ObjectHideFlags: 0

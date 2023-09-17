@@ -48,6 +48,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f640e4ca56e4873bf3712a1dcad8317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 117070132475391849}
+  _colors:
+  - {r: 0.6122223, g: 0, b: 0.8113208, a: 1}
+  - {r: 1, g: 0, b: 0.25327587, a: 1}
+  - {r: 0, g: 1, b: 0.93964195, a: 1}
+  - {r: 1, g: 0.8761995, b: 0, a: 1}
+  _minScale: 0.15
+  _maxScale: 0.2
 --- !u!33 &6481891562252500857
 MeshFilter:
   m_ObjectHideFlags: 0

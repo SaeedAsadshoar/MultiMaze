@@ -2,6 +2,7 @@ using Domain.Constants;
 using Domain.Enum;
 using Domain.GameEvents;
 using Services.EventSystem.Interface;
+using Services.LevelLoader.Interface;
 using Services.UISystem.Abstract;
 using TMPro;
 using UnityEngine;
@@ -27,16 +28,32 @@ namespace Presentation.UI
         [SerializeField] private TextMeshProUGUI _ballInCupCountLabel;
 
         private bool _isButtonOutOfScreen;
+
+        private ILevelLoaderService _levelLoaderService;
+
         public override UiPanelNames PanelName => UiPanelNames.UIGame;
 
         [Inject]
-        private void Init(IEventService eventService)
+        private void Init(IEventService eventService,
+            ILevelLoaderService levelLoaderService)
         {
             eventService.Subscribe<OnLoadLevelComplete>(GameEvents.ON_LOAD_LEVEL_COMPLETE, OnLoadLevelComplete);
             eventService.Subscribe<OnBallCountChanged>(GameEvents.ON_BALL_COUNT_CHANGED, OnBallCountChanged);
+            _levelLoaderService = levelLoaderService;
+        }
+
+        private void Awake()
+        {
+            _finishLevelButton.onClick.AddListener(FinishLevelButtonClicked);
+            _restartLevelButton.onClick.AddListener(RestartLevelButtonClicked);
         }
 
         private void OnEnable()
+        {
+            Reset();
+        }
+
+        private void Reset()
         {
             _firstStarFiller.fillAmount = 0;
             _secondStarFiller.fillAmount = 0;
@@ -51,6 +68,7 @@ namespace Presentation.UI
 
         private void OnLoadLevelComplete(OnLoadLevelComplete onLoadLevelComplete)
         {
+            Reset();
             _ballMaxCountLabel.text = onLoadLevelComplete.BallNeededToFinish.ToString();
             _ballInCupCountLabel.text = "0";
         }
@@ -69,6 +87,16 @@ namespace Presentation.UI
                 _isButtonOutOfScreen = false;
                 _endLevelButtonAnimation.Play(COME_IN_ANIMATION);
             }
+        }
+
+        private void RestartLevelButtonClicked()
+        {
+            _levelLoaderService.RestartLevel();
+        }
+
+        private void FinishLevelButtonClicked()
+        {
+            _levelLoaderService.LoadNextLevel();
         }
     }
 }

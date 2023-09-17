@@ -70,6 +70,7 @@ namespace Presentation.GamePlay.Balls.Abstract
             _memoryPool.Despawn(this);
             _memoryPool = null;
             _isInsideCup = false;
+            ObjectRigidbody.velocity = Vector3.zero;
         }
 
         public virtual void Kill()
@@ -86,13 +87,25 @@ namespace Presentation.GamePlay.Balls.Abstract
         public virtual void ExitPuzzle()
         {
             _ballFreeZonePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallFreeZonePlace);
-            RootTransform.SetParent(_ballFreeZonePlace);
+            _ballInPuzzlePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace);
+
+            if (RootTransform.parent == _ballInPuzzlePlace)
+            {
+                RootTransform.SetParent(_ballFreeZonePlace);
+                _eventService.Fire(GameEvents.ON_BALL_EXIT_PUZZLE, new OnBallExitPuzzle());
+            }
         }
 
         public void EnterPuzzle()
         {
+            _ballFreeZonePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallFreeZonePlace);
             _ballInPuzzlePlace ??= _inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace);
-            RootTransform.SetParent(_ballInPuzzlePlace);
+
+            if (RootTransform.parent == _ballFreeZonePlace)
+            {
+                RootTransform.SetParent(_ballInPuzzlePlace);
+                _eventService.Fire(GameEvents.ON_BALL_ENTERED_PUZZLE, new OnBallEnteredPuzzle());
+            }
         }
 
         public class Factory : PlaceholderFactory<T>
