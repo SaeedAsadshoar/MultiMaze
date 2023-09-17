@@ -17,6 +17,7 @@ namespace Services.FactorySystem.Service
         private readonly DiContainer _diContainer;
 
         private UILoading.Factory _uiLoadingFactory;
+        private UIGame.Factory _uiGameFactory;
 
         public UIScreenFactory(DiContainer diContainer)
         {
@@ -44,6 +45,8 @@ namespace Services.FactorySystem.Service
             {
                 case UiPanelNames.UILoading:
                     return _uiLoadingFactory.Create();
+                case UiPanelNames.UIGame:
+                    return _uiGameFactory.Create();
             }
 
             return null;
@@ -56,6 +59,9 @@ namespace Services.FactorySystem.Service
                 case UiPanelNames.UILoading:
                     LoadFactory<UILoading, UILoading.Factory>(panelName.ToString(), panelName, _diContainer);
                     break;
+                case UiPanelNames.UIGame:
+                    LoadFactory<UIGame, UIGame.Factory>(panelName.ToString(), panelName, _diContainer);
+                    break;
             }
         }
 
@@ -65,6 +71,8 @@ namespace Services.FactorySystem.Service
             {
                 case UiPanelNames.UILoading:
                     return _uiLoadingFactory != null;
+                case UiPanelNames.UIGame:
+                    return _uiGameFactory != null;
             }
 
             return false;
@@ -82,6 +90,9 @@ namespace Services.FactorySystem.Service
                 {
                     case UiPanelNames.UILoading:
                         _uiLoadingFactory = diContainer.Resolve<UILoading.Factory>();
+                        break;
+                    case UiPanelNames.UIGame:
+                        _uiGameFactory = diContainer.Resolve<UIGame.Factory>();
                         break;
                 }
             }

@@ -102,7 +102,10 @@ namespace Services.LevelLoader.Service
             }
             else
             {
-                _eventService.Fire(GameEvents.ON_LOAD_LEVEL_COMPLETE, new OnLoadLevelComplete());
+                _eventService.Fire(GameEvents.ON_LOAD_LEVEL_COMPLETE,
+                    new OnLoadLevelComplete(_currentLevelData.BallNeededToFinish[0],
+                        _currentLevelData.BallNeededToFinish[1],
+                        _currentLevelData.BallNeededToFinish[2]));
             }
         }
 

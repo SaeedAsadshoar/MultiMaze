@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Domain.Constants;
 using Domain.Data;
 using Domain.Enum;
@@ -40,7 +39,7 @@ namespace Services.UISystem.Service
             _eventService = eventService;
         }
 
-        public IUIScreen OpenPage(UiPanelNames panelName, Action onOpenPage, Action onClose = null)
+        public IUIScreen OpenPage(UiPanelNames panelName, Action onOpenPage, Action onClose)
         {
             if (_pages.ContainsKey(panelName))
             {

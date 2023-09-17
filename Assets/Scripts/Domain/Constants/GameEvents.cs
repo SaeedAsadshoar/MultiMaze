@@ -7,5 +7,6 @@
         public const int ON_LOAD_LEVEL_START = 2;
         public const int ON_LOAD_LEVEL_COMPLETE = 3;
         public const int ON_BALL_ENTERED_CUP = 4;
+        public const int ON_BALL_COUNT_CHANGED = 5;
     }
 }
