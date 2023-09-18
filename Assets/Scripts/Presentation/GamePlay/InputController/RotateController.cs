@@ -86,13 +86,13 @@ namespace Presentation.GamePlay.InputController
 
         private void OnStartLoadLevel(OnLoadLevelStart onLoadLevelStart)
         {
+            Reset();
             _canRotate = false;
         }
 
         private void OnLoadLevelComplete(OnLoadLevelComplete onLoadLevelComplete)
         {
-            _rotationSpeed = _deltaDegree = _rotationCenterPos.z = 0;
-            _levelPlaceTransform.rotation = Quaternion.identity;
+            Reset();
             _rotationCenterPos = _mainCamera.WorldToScreenPoint(_levelPlaceTransform.position);
             _canRotate = true;
         }
@@ -100,6 +100,12 @@ namespace Presentation.GamePlay.InputController
         private void OnGameFinished(OnGameFinished onGameFinished)
         {
             _canRotate = false;
+        }
+
+        private void Reset()
+        {
+            _rotationSpeed = _deltaDegree = _rotationCenterPos.z = 0;
+            _levelPlaceTransform.rotation = Quaternion.identity;
         }
 
         private float CalculateRotationDegree(Vector3 touchPosition)

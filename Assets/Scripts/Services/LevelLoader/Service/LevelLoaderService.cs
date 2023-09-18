@@ -119,16 +119,29 @@ namespace Services.LevelLoader.Service
                 CreateBall();
                 _updateService.DoInNextFrame(CreateBalls);
                 _uiLoading.SetProgress((float)_createdBalls.Count / (float)_currentLevelData.BallCountInBase);
+                foreach (var ball in _createdBalls)
+                {
+                    ball.ObjectRigidbody.velocity = Vector3.zero;
+                }
             }
             else
             {
                 OnLoadLevelFinished();
             }
         }
+        
+        private void CreateBall()
+        {
+            IBall ball = _factoryService.GetBall(BallTypes.SimpleBall) as IBall;
+            _createdBalls.Add(ball);
+            ball.RootTransform.SetParent(_inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace));
+            ball.RootTransform.position = _currentLevelObj.transform.position;
+            ball.ObjectRigidbody.velocity = Vector3.zero;
+        }
 
         private async void OnLoadLevelFinished()
         {
-            await Task.Delay(1500);
+            await Task.Delay(100);
             _eventService.Fire(GameEvents.ON_LOAD_LEVEL_COMPLETE,
                 new OnLoadLevelComplete(_currentLevelData.BallNeededToFinish[0],
                     _currentLevelData.BallNeededToFinish[1],
@@ -136,20 +149,6 @@ namespace Services.LevelLoader.Service
                     _currentLevelData.BallCountInBase));
             _uiService.ClosePage(UiPanelNames.UILoading, null);
             _uiLoading = null;
-        }
-
-        private void CreateBall()
-        {
-            IBall ball = _factoryService.GetBall(BallTypes.SimpleBall) as IBall;
-            _createdBalls.Add(ball);
-            ball.RootTransform.SetParent(_inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace));
-            ball.RootTransform.position = _currentLevelObj.transform.position;
-
-            int count = _createdBalls.Count;
-            for (int i = 0; i < count; i++)
-            {
-                _createdBalls[i].ObjectRigidbody.velocity = Vector3.zero;
-            }
         }
 
         private void ClearLevel()

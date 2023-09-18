@@ -21,4 +21,4 @@ MonoBehaviour:
   - _ballType: 0
     _dynamicFriction: 0.6
     _staticFriction: 0.6
-    _bounciness: 1
+    _bounciness: 0
