@@ -2,7 +2,7 @@ using Domain.Constants;
 using Presentation.GamePlay.Balls.Interface;
 using UnityEngine;
 
-namespace Presentation.GamePlay
+namespace Presentation.GamePlay.Triggers
 {
     public class PuzzleEnterTrigger : MonoBehaviour
     {

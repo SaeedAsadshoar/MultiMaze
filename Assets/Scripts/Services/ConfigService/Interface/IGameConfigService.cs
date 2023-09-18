@@ -10,6 +10,7 @@ namespace Services.ConfigService.Interface
         TouchSettings TouchSetting { get; }
         float LoadProgress { get; }
         int MaxLevelCount { get; }
+        bool IsLoadLevelByObjectPrefab { get; }
         void LoadGameConfig();
         LevelData GetLevelData(int levelIndex);
         BallPhysicsSettings GetBallPhysicsSetting(BallTypes ballType);

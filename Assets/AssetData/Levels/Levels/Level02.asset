@@ -15,6 +15,7 @@ MonoBehaviour:
   _levelNo: 1
   _ballCountInBase: 60
   _ballNeededToFinish: 0a0000000a0000000f000000
-  _ballSpawnPosition: {x: 0, y: 0, z: 0}
   _levelPrefab: {fileID: 5005821432592297525, guid: 5443136089753614088b9cfae3a19e51, type: 3}
   _cup: {fileID: 231006977627930031, guid: 20691cecedb39534d97f48f01df0c51d, type: 3}
+  _pipeTexture: {fileID: 6192944022281365145, guid: 00cd0b1feb81eb64886e80c07a819e24, type: 3}
+  _basePrefab: {fileID: 6465804531970878407, guid: 7ae9606f8e456b640a7fc04306c457af, type: 3}

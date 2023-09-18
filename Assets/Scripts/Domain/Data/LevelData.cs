@@ -9,13 +9,22 @@ namespace Domain.Data
         [SerializeField] private int _ballCountInBase;
         [SerializeField] private int[] _ballNeededToFinish;
 
-        [SerializeField] private GameObject _levelPrefab;
+        [Header("Level Objects")] [Space(20)] [Header("With GameObject")] [SerializeField]
+        private GameObject _levelPrefab;
+
         [SerializeField] private GameObject _cup;
+
+        [Header("With Level Texture")] [SerializeField]
+        private Texture2D _pipeTexture;
+
+        [SerializeField] private GameObject _basePrefab;
 
         public int LevelNo => _levelNo;
         public int BallCountInBase => _ballCountInBase;
         public int[] BallNeededToFinish => _ballNeededToFinish;
         public GameObject LevelPrefab => _levelPrefab;
         public GameObject Cup => _cup;
+        public Texture2D PipeTexture => _pipeTexture;
+        public GameObject BasePrefab => _basePrefab;
     }
 }

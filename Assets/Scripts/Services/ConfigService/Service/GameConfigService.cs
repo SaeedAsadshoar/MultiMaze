@@ -18,6 +18,7 @@ namespace Services.ConfigService.Service
         public TouchSettings TouchSetting => _gameConfig.TouchSettings;
         public float LoadProgress => _loadProgress;
         public int MaxLevelCount => _gameConfig.LevelSequence.AllLevelsData.Length;
+        public bool IsLoadLevelByObjectPrefab => _gameConfig.IsLoadLevelByObjectPrefab;
 
         public GameConfigService()
         {

@@ -93,8 +93,17 @@ namespace Services.LevelLoader.Service
             _eventService.Fire(GameEvents.ON_LOAD_LEVEL_START, new OnLoadLevelStart());
             _currentLevelData = _gameConfigService.GetLevelData(index);
 
-            _currentLevelObj = Object.Instantiate(_currentLevelData.LevelPrefab);
             _currentCupObj = Object.Instantiate(_currentLevelData.Cup);
+
+            if (_gameConfigService.IsLoadLevelByObjectPrefab)
+            {
+                _currentLevelObj = Object.Instantiate(_currentLevelData.LevelPrefab);
+            }
+            else
+            {
+                _currentLevelObj = Object.Instantiate(_currentLevelData.BasePrefab);
+                _currentLevelObj.GetComponent<ILevelGenerator>().GenerateLevel(_currentLevelData.PipeTexture);
+            }
 
             var levelTransform = _currentLevelObj.transform;
             levelTransform.SetParent(_inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.LevelPlace));
@@ -129,7 +138,7 @@ namespace Services.LevelLoader.Service
                 OnLoadLevelFinished();
             }
         }
-        
+
         private void CreateBall()
         {
             IBall ball = _factoryService.GetBall(BallTypes.SimpleBall) as IBall;

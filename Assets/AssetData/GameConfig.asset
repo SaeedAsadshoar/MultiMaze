@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce9898ca4d4d53428dc772ef5a30ba2, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
+  _isLoadLevelByObjectPrefab: 0
   _levelSequence: {fileID: 11400000, guid: 02924b5c323597d4f8ab321757381304, type: 2}
   _touchSettings:
     _stopRotateSpeed: 20
