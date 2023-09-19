@@ -26,6 +26,7 @@ namespace Services.LevelLoader.Service
         private GameObject _currentCupObj;
         private readonly List<IBall> _createdBalls;
         private LevelData _currentLevelData;
+        private ColorPalette _selectedColorPalette;
 
         private readonly IStorageService _storageService;
         private readonly IGameConfigService _gameConfigService;
@@ -87,6 +88,7 @@ namespace Services.LevelLoader.Service
             _uiLoading.SetLoading($"Load Level {index + 1}");
             _uiLoading.SetProgress(0);
 
+            _selectedColorPalette = _gameConfigService.GetRandomColorPalette();
             await Task.Delay(1000);
 
             ClearLevel();
@@ -142,6 +144,7 @@ namespace Services.LevelLoader.Service
         private void CreateBall()
         {
             IBall ball = _factoryService.GetBall(BallTypes.SimpleBall) as IBall;
+            ball.SetColorPalette(_selectedColorPalette);
             _createdBalls.Add(ball);
             ball.RootTransform.SetParent(_inGameRepositoryService.GetRepository((int)InGameRepositoryTypes.BallInPuzzlePlace));
             ball.RootTransform.position = _currentLevelObj.transform.position;

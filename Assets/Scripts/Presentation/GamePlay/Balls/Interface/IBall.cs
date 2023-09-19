@@ -1,3 +1,4 @@
+using Domain.Data;
 using UnityEngine;
 
 namespace Presentation.GamePlay.Balls.Interface
@@ -12,5 +13,6 @@ namespace Presentation.GamePlay.Balls.Interface
         void MoveInsideCup();
         void ExitPuzzle();
         void EnterPuzzle();
+        void SetColorPalette(ColorPalette colorPalette);
     }
 }

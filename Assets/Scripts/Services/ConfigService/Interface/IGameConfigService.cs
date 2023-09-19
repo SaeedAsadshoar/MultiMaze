@@ -14,5 +14,6 @@ namespace Services.ConfigService.Interface
         void LoadGameConfig();
         LevelData GetLevelData(int levelIndex);
         BallPhysicsSettings GetBallPhysicsSetting(BallTypes ballType);
+        ColorPalette GetRandomColorPalette();
     }
 }

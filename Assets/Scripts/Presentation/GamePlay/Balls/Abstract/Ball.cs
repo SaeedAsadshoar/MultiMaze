@@ -1,4 +1,5 @@
 using Domain.Constants;
+using Domain.Data;
 using Domain.Enum;
 using Domain.GameEvents;
 using Domain.Interface;
@@ -72,7 +73,7 @@ namespace Presentation.GamePlay.Balls.Abstract
         {
         }
 
-        public void OnSpawned(IMemoryPool memoryPool)
+        public virtual void OnSpawned(IMemoryPool memoryPool)
         {
             _isInsideCup = false;
             _memoryPool = memoryPool;
@@ -120,6 +121,11 @@ namespace Presentation.GamePlay.Balls.Abstract
                 RootTransform.SetParent(_ballInPuzzlePlace);
                 EventService.Fire(GameEvents.ON_BALL_ENTERED_PUZZLE, new OnBallEnteredPuzzle());
             }
+        }
+
+        public virtual void SetColorPalette(ColorPalette colorPalette)
+        {
+            throw new System.NotImplementedException();
         }
 
         public class Factory : PlaceholderFactory<T>

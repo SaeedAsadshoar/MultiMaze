@@ -3,6 +3,7 @@ using Domain.Constants;
 using Domain.Data;
 using Domain.Enum;
 using Services.ConfigService.Interface;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -68,6 +69,11 @@ namespace Services.ConfigService.Service
             }
 
             return new BallPhysicsSettings();
+        }
+
+        public ColorPalette GetRandomColorPalette()
+        {
+            return _gameConfig.ColorPalettes[Random.Range(0, _gameConfig.ColorPalettes.Length)];
         }
     }
 }

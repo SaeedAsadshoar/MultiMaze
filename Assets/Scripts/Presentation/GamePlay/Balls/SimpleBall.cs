@@ -10,7 +10,6 @@ namespace Presentation.GamePlay.Balls
     {
         [SerializeField] private BallTypes _ballType;
         [SerializeField] private MeshRenderer _meshRenderer;
-        [SerializeField] private Color[] _colors;
         [SerializeField] private float _minScale;
         [SerializeField] private float _maxScale;
 
@@ -18,7 +17,6 @@ namespace Presentation.GamePlay.Balls
 
         private void OnEnable()
         {
-            _meshRenderer.material.color = _colors[Random.Range(0, _colors.Length)];
             transform.localScale = Vector3.one * Random.Range(_minScale, _maxScale);
             _ballPhysicsSetting = GameConfigService.GetBallPhysicsSetting(_ballType);
             PhysicMaterial.bounciness = _ballPhysicsSetting.Bounciness;
@@ -34,5 +32,10 @@ namespace Presentation.GamePlay.Balls
             PhysicMaterial.staticFriction = _ballPhysicsSetting.StaticFriction;
         }
 #endif
+
+        public override void SetColorPalette(ColorPalette colorPalette)
+        {
+            _meshRenderer.material.mainTexture = colorPalette.ColorTexture[Random.Range(0, colorPalette.ColorTexture.Length)];
+        }
     }
 }

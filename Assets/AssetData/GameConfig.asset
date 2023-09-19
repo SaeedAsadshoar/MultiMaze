@@ -16,10 +16,31 @@ MonoBehaviour:
   _levelSequence: {fileID: 11400000, guid: 02924b5c323597d4f8ab321757381304, type: 2}
   _touchSettings:
     _stopRotateSpeed: 20
-    _deltaDistanceRatio: 0.015
-    _centerDistanceRatio: 0.015
+    _deltaDistanceRatio: 0.008
+    _centerDistanceRatio: 0.008
   _ballPhysicsSettings:
   - _ballType: 0
     _dynamicFriction: 0.6
     _staticFriction: 0.6
     _bounciness: 0
+  _colorPalettes:
+  - _colorTexture:
+    - {fileID: 2800000, guid: 3e13eec76e1685e43bdc75e4162d9109, type: 3}
+    - {fileID: 2800000, guid: d4afcf97f2952c84e8a17a7d3247550e, type: 3}
+    - {fileID: 2800000, guid: 0577ff4544edc76459a93abf9d83e512, type: 3}
+    - {fileID: 2800000, guid: 65672841d246b614e8991efa5083a1ac, type: 3}
+  - _colorTexture:
+    - {fileID: 2800000, guid: 83c612e934047144195f00cae7ff3fae, type: 3}
+    - {fileID: 2800000, guid: 6eaf1119d3a75914e85f4842e1ce8bc6, type: 3}
+    - {fileID: 2800000, guid: 9acfdb15d80dc1e43b500513feee8e4e, type: 3}
+    - {fileID: 2800000, guid: fa84a3bd81fde9846abc854c7484edb7, type: 3}
+  - _colorTexture:
+    - {fileID: 2800000, guid: 72e50a7e5c4f62345bf5d4e43b1f10d0, type: 3}
+    - {fileID: 2800000, guid: e06c40a200d676644af3b8771c4e34a8, type: 3}
+    - {fileID: 2800000, guid: 336d31fa12c3878458a4bc206c1c5d72, type: 3}
+    - {fileID: 2800000, guid: 2c632cc84af129f4f8d3c57baaa35fc0, type: 3}
+  - _colorTexture:
+    - {fileID: 2800000, guid: 9fa22c04e6c8da54db7e36bcf608b9aa, type: 3}
+    - {fileID: 2800000, guid: 3391c977539d82f4bae7e19c306ff45c, type: 3}
+    - {fileID: 2800000, guid: 5c3f500cd646f6047b763fc69ee4ff36, type: 3}
+    - {fileID: 2800000, guid: f658b02f294ebf84b8db44d502ae9172, type: 3}

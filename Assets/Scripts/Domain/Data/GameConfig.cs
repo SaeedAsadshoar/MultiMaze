@@ -14,9 +14,13 @@ namespace Domain.Data
         [Header("Balls Physics"), SerializeField]
         private BallPhysicsSettings[] _ballPhysicsSettings;
 
+        [Header("Color Palettes"), SerializeField]
+        private ColorPalette[] _colorPalettes;
+
         public bool IsLoadLevelByObjectPrefab => _isLoadLevelByObjectPrefab;
         public LevelSequence LevelSequence => _levelSequence;
         public TouchSettings TouchSettings => _touchSettings;
         public BallPhysicsSettings[] BallPhysicsSettings => _ballPhysicsSettings;
+        public ColorPalette[] ColorPalettes => _colorPalettes;
     }
 }
