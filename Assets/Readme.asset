@@ -36,8 +36,8 @@ MonoBehaviour:
 
 
       You
-      can Create or delete color palette for balls to. it will select randomly on
-      each level load'
+      can Create or delete color palette for balls in game config file. it will select
+      randomly on each level load'
     linkText: 
     url: 
   isRoot: 0
