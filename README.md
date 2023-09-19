@@ -5,6 +5,6 @@ Go To AssetData -> Levels -> Levels for add or change each level data
 
 Go To AssetData -> Levels and select LevelSequence for add or remove or change level index
 
-by select AssetData -> GameConfig you can change "Is Load Level By Object Prefab" state for load game from prefab object or vector graphics
+By select AssetData -> GameConfig you can change "Is Load Level By Object Prefab" state for load game from prefab object or vector graphics
 
 Thanks
