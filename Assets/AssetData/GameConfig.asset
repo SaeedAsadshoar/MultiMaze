@@ -16,8 +16,8 @@ MonoBehaviour:
   _levelSequence: {fileID: 11400000, guid: 02924b5c323597d4f8ab321757381304, type: 2}
   _touchSettings:
     _stopRotateSpeed: 20
-    _deltaDistanceRatio: 0.005
-    _centerDistanceRatio: 0.005
+    _deltaDistanceRatio: 0.015
+    _centerDistanceRatio: 0.015
   _ballPhysicsSettings:
   - _ballType: 0
     _dynamicFriction: 0.6

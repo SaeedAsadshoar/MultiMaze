@@ -10,6 +10,7 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
+        private const int DELAY_TIME_TO_SHOW_FINISH_UI = 1;
         private int _ballNeededToFinishCount;
         private int _secondStarBallCount;
         private int _thirdStarBallCount;
@@ -37,7 +38,7 @@ namespace Managers
 
         private void OnLoadLevelStart(OnLoadLevelStart onLoadLevelStart)
         {
-            CancelInvoke(nameof(CheckForGameFinish));
+            CancelInvoke(nameof(FinishGame));
             _isGameStarted = false;
             _inPuzzleBalls = _inCupBallCount = _ballNeededToFinishCount = _secondStarBallCount = _thirdStarBallCount = 0;
             _uiService.OpenPage(UiPanelNames.UIGame, null, null);
@@ -99,7 +100,7 @@ namespace Managers
             if (_inPuzzleBalls <= 0)
             {
                 _uiService.ClosePage(UiPanelNames.UIGame, null);
-                Invoke(nameof(CheckForGameFinish), 1);
+                Invoke(nameof(FinishGame), DELAY_TIME_TO_SHOW_FINISH_UI);
                 return;
             }
 
@@ -120,7 +121,7 @@ namespace Managers
             _isGameStarted = false;
         }
 
-        private void CheckForGameFinish()
+        private void FinishGame()
         {
             _eventService.Fire(GameEvents.ON_GAME_FINISHED, new OnGameFinished());
             _uiService.OpenPage(CanFinishGame() ? UiPanelNames.UILevelPassed : UiPanelNames.UILevelFailed, null, null);

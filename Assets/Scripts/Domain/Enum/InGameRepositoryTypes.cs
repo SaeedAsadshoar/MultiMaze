@@ -7,5 +7,6 @@ namespace Domain.Enum
         BallInPuzzlePlace = 2,
         LevelPlaceRigidBody = 3,
         BallFreeZonePlace = 4,
+        SplashPlace = 5,
     }
 }

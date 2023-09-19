@@ -29,7 +29,6 @@ namespace Presentation.GamePlay.Balls
 #if UNITY_EDITOR
         private void Update()
         {
-            //_ballPhysicsSetting = GameConfigService.GetBallPhysicsSetting(_ballType);
             PhysicMaterial.bounciness = _ballPhysicsSetting.Bounciness;
             PhysicMaterial.dynamicFriction = _ballPhysicsSetting.DynamicFriction;
             PhysicMaterial.staticFriction = _ballPhysicsSetting.StaticFriction;
